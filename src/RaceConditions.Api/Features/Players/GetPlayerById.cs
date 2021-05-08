@@ -12,7 +12,7 @@ namespace RaceConditions.Api.Features
     {
         public class Request : IRequest<Response>
         {
-            public Guid PlayerId { get; set; }
+            public Guid? PlayerId { get; set; }
         }
 
         public class Response : ResponseBase

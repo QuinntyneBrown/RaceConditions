@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, of, Subject } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { Player } from '../player';
 import { PlayerService } from '../player.service';
 
@@ -10,9 +10,9 @@ import { PlayerService } from '../player.service';
   templateUrl: './players.component.html',
   styleUrls: ['./players.component.scss']
 })
-export class PlayersComponent implements OnDestroy, OnInit {
+export class PlayersComponent {
   private readonly _destroyed: Subject<void> = new Subject();
-  public readonly players$: Observable<Player[]> = this._playerService.get();    
+  public readonly players$: BehaviorSubject<Player[]> = new BehaviorSubject([]);    
   public readonly playerSelectControl: FormControl = new FormControl();  
   public readonly playerForm: FormGroup = new FormGroup({
     name: new FormControl("", []),
@@ -23,17 +23,16 @@ export class PlayersComponent implements OnDestroy, OnInit {
     private readonly _playerService: PlayerService
   ) {  }
 
-  ngOnInit(): void {
-    this.playerSelectControl.valueChanges
-    .pipe(
-      takeUntil(this._destroyed),
-      switchMap(playerId => this._playerService.getById({ playerId })),
-      tap(player => this.playerForm.patchValue(player))
-    ).subscribe();
-  }
-
-  ngOnDestroy() {
-    this._destroyed.next();
-    this._destroyed.complete();
-  }
+  public vm$ = this.playerSelectControl.valueChanges
+  .pipe(
+    startWith(0),
+    switchMap(playerId => forkJoin([
+      playerId ? this._playerService.getById({ playerId }): of({}),
+      !playerId ? this._playerService.get() : of(null)
+    ])),    
+    map(([player,players]) => {
+      this.playerForm.patchValue(player);
+      this.players$.next(players || this.players$.value);
+      return true;
+    }));
 }
