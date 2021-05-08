@@ -1,0 +1,26 @@
+<h1>Players</h1>
+
+<mat-form-field appearance="outline">
+    <mat-select color="primary" [formControl]="playerSelectControl" placeholder="Select a Player">
+        <mat-option *ngFor="let player of players" [value]="player.playerId">
+        {{ player.name }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+
+<form [formGroup]="playerForm"  novalidate autocomplete='off' spellcheck='false'>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder='Name'
+        formControlName='name' required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea  matInput placeholder='Description'
+        formControlName='description' required></textarea>
+    </mat-form-field>
+
+</form>

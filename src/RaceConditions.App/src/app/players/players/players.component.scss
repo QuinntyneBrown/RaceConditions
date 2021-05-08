@@ -1,0 +1,15 @@
+:host {
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1fr;
+    box-sizing: border-box;
+
+    textarea {
+        height: 150px;
+    }
+
+    form {
+        display: grid;
+        box-sizing: border-box;
+    }
+}
