@@ -2,7 +2,7 @@
 
 <mat-form-field appearance="outline">
     <mat-select color="primary" [formControl]="playerSelectControl" placeholder="Select a Player">
-        <mat-option *ngFor="let player of players" [value]="player.playerId">
+        <mat-option *ngFor="let player of players$ | async" [value]="player.playerId">
         {{ player.name }}
         </mat-option>
     </mat-select>
