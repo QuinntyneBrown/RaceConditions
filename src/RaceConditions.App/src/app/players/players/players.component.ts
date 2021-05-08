@@ -18,7 +18,7 @@ export class PlayersComponent {
     private readonly _playerService: PlayerService
   ) {  }
 
-  public vm$ = this.playerSelectControl.valueChanges
+  public vm$: Observable<FormGroup> = this.playerSelectControl.valueChanges
   .pipe(
     startWith(null),
     switchMap(playerId => playerId ? this._playerService.getById({ playerId }) : of(null)),    
