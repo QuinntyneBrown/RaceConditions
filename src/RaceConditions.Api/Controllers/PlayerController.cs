@@ -23,9 +23,7 @@ namespace RaceConditions.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(GetPlayerById.Response), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<GetPlayerById.Response>> GetById([FromRoute] GetPlayerById.Request request)
-        {            
-            await Task.Delay(new Random().Next(0, 3) * 1000);
-
+        {                        
             var response = await _mediator.Send(request);
 
             if (response.Player == null)

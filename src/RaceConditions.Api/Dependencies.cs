@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
+using RaceConditions.Api.Behaviors;
 
 namespace RaceConditions.Api
 {
@@ -44,6 +45,8 @@ namespace RaceConditions.Api
                 .AllowAnyHeader()
                 .SetIsOriginAllowed(isOriginAllowed: _ => true)
                 .AllowCredentials()));
+            
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(DelayedBehavior<,>));
 
             services.AddValidation(typeof(Startup));
 
